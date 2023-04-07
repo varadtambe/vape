@@ -25,10 +25,22 @@ app.set("view engine" , "hbs");
 app.set("views" , templatepath);
 hbs.registerPartials(partialpath);
 
+// Define a route for the home page
+app.get('/', (req, res) => {
+    res.render('index');
+  });
 
-app.get("/" , (req , res) => {
-    res.render("index");
-})
+// Define a route for the display page
+app.get('/table', async (req, res) => {
+    try {
+      const data = await User.find().lean();
+      res.status(201).render('display', { data });
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  });
+
 
 app.post("/contact" , async(req , res) => {
     try{
